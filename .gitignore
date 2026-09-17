@@ -1,0 +1,18 @@
+# Environment / secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Pipeline output
+reports/
+
+# OS / editor cruft
+.DS_Store
+.vscode/
+.idea/

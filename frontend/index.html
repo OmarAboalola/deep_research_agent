@@ -1,0 +1,535 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Canopy — deep research, out in the open</title>
+<link rel="icon" href="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWZ6aW14eWliZmY4cHJrM3lheXEzd2Q4eWl2NjI5aTF3ZzNvZjBmaSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/26n6WywJyh39n1pBu/giphy.gif" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<style>
+  :root{
+    --ink:       #123F36;   /* deep forest — background */
+    --moss:      #2A6B5C;   /* mid teal-green — panels, secondary text */
+    --gold:      #C49A45;   /* accent — cta, links, highlights */
+    --cream:     #E8DCC4;   /* warm cream — primary text on dark */
+    --ink-soft:  #17493e;
+    --moss-soft: #234f43;
+    --shadow:    rgba(6, 22, 18, 0.45);
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0;
+    min-height:100%;
+    background:
+      radial-gradient(1100px 620px at 50% -8%, var(--ink-soft) 0%, var(--ink) 55%),
+      var(--ink);
+    color:var(--cream);
+    font-family:'Work Sans', system-ui, sans-serif;
+  }
+
+  body{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-height:100vh;
+    padding:8vh 20px 10vh;
+  }
+
+  /* subtle canopy texture — soft leaf-shaped blobs, decorative only */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+    background:
+      radial-gradient(420px 260px at 8% 18%, rgba(42,107,92,0.35), transparent 60%),
+      radial-gradient(520px 300px at 95% 12%, rgba(196,154,69,0.10), transparent 60%),
+      radial-gradient(600px 340px at 85% 92%, rgba(42,107,92,0.28), transparent 60%);
+  }
+
+  .stage{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:680px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    transition:transform 480ms cubic-bezier(.22,.61,.36,1);
+  }
+
+  /* ---------- Hero / wordmark ---------- */
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:10px;
+  }
+  .brand img{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--gold);
+    box-shadow:0 6px 18px var(--shadow);
+    flex-shrink:0;
+  }
+  .brand h1{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:44px;
+    letter-spacing:-0.01em;
+    margin:0;
+    color:var(--cream);
+  }
+  .tagline{
+    font-size:15px;
+    color:var(--gold);
+    margin:0 0 40px;
+    letter-spacing:0.01em;
+  }
+
+  /* ---------- Search bar ---------- */
+  form.search{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--moss-soft);
+    border:1px solid rgba(232,220,196,0.14);
+    border-radius:999px;
+    padding:8px 8px 8px 24px;
+    box-shadow:0 10px 30px var(--shadow);
+    transition:border-color 200ms ease, box-shadow 200ms ease;
+  }
+  form.search:focus-within{
+    border-color:var(--gold);
+    box-shadow:0 10px 30px var(--shadow), 0 0 0 3px rgba(196,154,69,0.18);
+  }
+  form.search input{
+    flex:1;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:var(--cream);
+    font-family:'Work Sans', sans-serif;
+    font-size:17px;
+    padding:12px 0;
+  }
+  form.search input::placeholder{ color:rgba(232,220,196,0.45); }
+
+  form.search button{
+    border:none;
+    cursor:pointer;
+    background:var(--gold);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    font-weight:600;
+    font-size:15px;
+    padding:12px 22px;
+    border-radius:999px;
+    transition:transform 150ms ease, background 150ms ease;
+  }
+  form.search button:hover{ background:#d6ad5c; }
+  form.search button:active{ transform:scale(0.97); }
+  form.search button:disabled{
+    background:rgba(196,154,69,0.35);
+    color:rgba(18,63,54,0.6);
+    cursor:not-allowed;
+  }
+
+  /* ---------- Example chips ---------- */
+  .chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    justify-content:center;
+    margin-top:22px;
+  }
+  .chip{
+    font-size:13.5px;
+    color:var(--cream);
+    background:rgba(232,220,196,0.06);
+    border:1px solid rgba(232,220,196,0.16);
+    padding:8px 16px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background 150ms ease, border-color 150ms ease;
+  }
+  .chip:hover{ background:rgba(232,220,196,0.12); border-color:rgba(232,220,196,0.3); }
+
+  /* ---------- Progress ---------- */
+  .progress{
+    width:100%;
+    margin-top:48px;
+    display:none;
+  }
+  .progress.active{ display:block; }
+
+  .progress-steps{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:16px;
+  }
+  .progress-step{
+    flex:1;
+    text-align:center;
+    font-size:12.5px;
+    color:rgba(232,220,196,0.4);
+    position:relative;
+    padding-top:22px;
+  }
+  .progress-step::before{
+    content:"";
+    position:absolute;
+    top:0; left:50%;
+    transform:translateX(-50%);
+    width:10px; height:10px;
+    border-radius:50%;
+    background:rgba(232,220,196,0.18);
+    transition:background 250ms ease, box-shadow 250ms ease;
+  }
+  .progress-step.active{ color:var(--cream); }
+  .progress-step.active::before{
+    background:var(--gold);
+    box-shadow:0 0 0 4px rgba(196,154,69,0.2);
+  }
+  .progress-step.done::before{ background:var(--moss); }
+
+  .progress-track{
+    height:3px;
+    width:100%;
+    background:rgba(232,220,196,0.1);
+    border-radius:3px;
+    overflow:hidden;
+    margin-bottom:14px;
+  }
+  .progress-bar{
+    height:100%;
+    width:8%;
+    background:var(--gold);
+    border-radius:3px;
+    transition:width 600ms ease;
+  }
+  .progress-message{
+    text-align:center;
+    font-size:14px;
+    color:var(--gold);
+    min-height:20px;
+  }
+
+  /* ---------- Result ---------- */
+  .result{
+    width:100%;
+    margin-top:40px;
+    display:none;
+  }
+  .result.active{ display:block; }
+
+  .result-card{
+    background:var(--moss-soft);
+    border:1px solid rgba(232,220,196,0.12);
+    border-radius:20px;
+    padding:32px 34px;
+    box-shadow:0 14px 40px var(--shadow);
+  }
+
+  .result-query{
+    font-size:12.5px;
+    color:var(--gold);
+    margin:0 0 6px;
+  }
+  .result-summary{
+    font-family:'Fraunces', serif;
+    font-size:21px;
+    line-height:1.5;
+    font-weight:400;
+    color:var(--cream);
+    margin:0 0 24px;
+    padding-bottom:24px;
+    border-bottom:1px solid rgba(232,220,196,0.12);
+  }
+
+  .markdown{
+    font-size:15.5px;
+    line-height:1.75;
+    color:rgba(232,220,196,0.92);
+    max-width:64ch;
+  }
+  .markdown h1, .markdown h2, .markdown h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    color:var(--cream);
+    line-height:1.3;
+  }
+  .markdown h1{ font-size:24px; margin:28px 0 12px; }
+  .markdown h2{ font-size:20px; margin:26px 0 10px; }
+  .markdown h3{ font-size:17px; margin:22px 0 8px; }
+  .markdown p{ margin:0 0 14px; }
+  .markdown ul, .markdown ol{ margin:0 0 14px; padding-left:22px; }
+  .markdown li{ margin-bottom:6px; }
+  .markdown a{ color:var(--gold); }
+  .markdown strong{ color:var(--cream); }
+  .markdown code{
+    background:rgba(0,0,0,0.2);
+    padding:2px 6px;
+    border-radius:5px;
+    font-size:0.9em;
+  }
+  .markdown blockquote{
+    margin:0 0 14px;
+    padding-left:16px;
+    border-left:3px solid var(--gold);
+    color:rgba(232,220,196,0.75);
+  }
+
+  .followups{
+    margin-top:28px;
+    padding-top:24px;
+    border-top:1px solid rgba(232,220,196,0.12);
+  }
+  .followups h4{
+    font-family:'Work Sans', sans-serif;
+    font-size:12.5px;
+    letter-spacing:0.02em;
+    color:var(--gold);
+    margin:0 0 12px;
+    font-weight:600;
+  }
+  .followups .chips{ justify-content:flex-start; margin-top:0; }
+
+  .saved-note{
+    text-align:center;
+    font-size:12.5px;
+    color:rgba(232,220,196,0.4);
+    margin-top:18px;
+  }
+
+  /* ---------- Error ---------- */
+  .error-box{
+    display:none;
+    width:100%;
+    margin-top:36px;
+    background:rgba(196,90,69,0.12);
+    border:1px solid rgba(196,90,69,0.35);
+    color:#f2d3c9;
+    border-radius:14px;
+    padding:18px 22px;
+    font-size:14px;
+    line-height:1.6;
+  }
+  .error-box.active{ display:block; }
+
+  footer{
+    position:relative;
+    z-index:1;
+    margin-top:auto;
+    padding-top:60px;
+    font-size:12.5px;
+    color:rgba(232,220,196,0.35);
+    text-align:center;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+
+  @media (max-width:560px){
+    .brand h1{ font-size:32px; }
+    .brand img{ width:44px; height:44px; }
+    form.search{ padding:6px 6px 6px 18px; }
+    form.search input{ font-size:15px; }
+    .result-card{ padding:24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="stage" id="stage">
+    <div class="brand">
+      <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdWZ6aW14eWliZmY4cHJrM3lheXEzd2Q4eWl2NjI5aTF3ZzNvZjBmaSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/26n6WywJyh39n1pBu/giphy.gif" alt="Canopy" />
+      <h1>Canopy</h1>
+    </div>
+    <p class="tagline">Deep research, out in the open.</p>
+
+    <form class="search" id="searchForm">
+      <input
+        type="text"
+        id="queryInput"
+        placeholder="Ask something worth digging into…"
+        autocomplete="off"
+        autofocus
+      />
+      <button type="submit" id="searchBtn">Research</button>
+    </form>
+
+    <div class="chips" id="exampleChips">
+      <div class="chip" data-q="Most popular AI agent frameworks in 2026">AI agent frameworks in 2026</div>
+      <div class="chip" data-q="How is lab-grown meat regulated around the world?">Lab-grown meat regulation</div>
+      <div class="chip" data-q="What's driving the current price of copper?">Why is copper up right now</div>
+    </div>
+
+    <div class="progress" id="progress">
+      <div class="progress-steps" id="progressSteps">
+        <div class="progress-step" data-stage="planning">Plan</div>
+        <div class="progress-step" data-stage="searching">Search</div>
+        <div class="progress-step" data-stage="writing">Write</div>
+        <div class="progress-step" data-stage="emailing">Send</div>
+      </div>
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+      <div class="progress-message" id="progressMessage">Queued…</div>
+    </div>
+
+    <div class="error-box" id="errorBox"></div>
+
+    <div class="result" id="result">
+      <div class="result-card">
+        <p class="result-query" id="resultQuery"></p>
+        <p class="result-summary" id="resultSummary"></p>
+        <div class="markdown" id="resultMarkdown"></div>
+        <div class="followups" id="followups" style="display:none;">
+          <h4>Keep digging</h4>
+          <div class="chips" id="followupChips"></div>
+        </div>
+      </div>
+      <p class="saved-note">Also saved to your reports folder, and emailed if that's configured.</p>
+    </div>
+  </div>
+
+  <footer>Canopy runs four agents — a planner, a researcher, a writer, and a messenger — to get you here.</footer>
+
+<script>
+  const STAGE_ORDER = ["planning", "searching", "writing", "emailing", "done"];
+  const STAGE_WIDTH = { planning: 20, searching: 45, writing: 70, saving: 82, emailing: 92, done: 100 };
+
+  const form = document.getElementById('searchForm');
+  const input = document.getElementById('queryInput');
+  const btn = document.getElementById('searchBtn');
+  const chipsWrap = document.getElementById('exampleChips');
+  const progress = document.getElementById('progress');
+  const progressBar = document.getElementById('progressBar');
+  const progressMessage = document.getElementById('progressMessage');
+  const progressSteps = document.querySelectorAll('.progress-step');
+  const errorBox = document.getElementById('errorBox');
+  const result = document.getElementById('result');
+  const resultQuery = document.getElementById('resultQuery');
+  const resultSummary = document.getElementById('resultSummary');
+  const resultMarkdown = document.getElementById('resultMarkdown');
+  const followups = document.getElementById('followups');
+  const followupChips = document.getElementById('followupChips');
+
+  let pollTimer = null;
+
+  function setStage(stage) {
+    const idx = STAGE_ORDER.indexOf(stage);
+    progressSteps.forEach(el => {
+      const elIdx = STAGE_ORDER.indexOf(el.dataset.stage);
+      el.classList.remove('active', 'done');
+      if (elIdx < idx || stage === 'done') el.classList.add('done');
+      else if (elIdx === idx) el.classList.add('active');
+    });
+    progressBar.style.width = (STAGE_WIDTH[stage] || 5) + '%';
+  }
+
+  function resetUI() {
+    errorBox.classList.remove('active');
+    errorBox.textContent = '';
+    result.classList.remove('active');
+    followups.style.display = 'none';
+    followupChips.innerHTML = '';
+  }
+
+  function runSearch(query) {
+    if (!query.trim()) return;
+    input.value = query;
+    resetUI();
+    btn.disabled = true;
+    progress.classList.add('active');
+    progressMessage.textContent = 'Queued…';
+    setStage('planning');
+
+    fetch('/api/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query })
+    })
+      .then(r => {
+        if (!r.ok) return r.json().then(e => { throw new Error(e.detail || 'Request failed.'); });
+        return r.json();
+      })
+      .then(({ job_id }) => poll(job_id, query))
+      .catch(err => showError(err.message));
+  }
+
+  function poll(jobId, query) {
+    clearInterval(pollTimer);
+    pollTimer = setInterval(() => {
+      fetch(`/api/status/${jobId}`)
+        .then(r => r.json())
+        .then(job => {
+          progressMessage.textContent = job.message || '';
+          setStage(job.stage);
+
+          if (job.stage === 'done' && job.result) {
+            clearInterval(pollTimer);
+            showResult(query, job.result);
+          } else if (job.stage === 'error') {
+            clearInterval(pollTimer);
+            showError(job.error || 'The research run failed.');
+          }
+        })
+        .catch(() => {
+          clearInterval(pollTimer);
+          showError('Lost connection to the server.');
+        });
+    }, 1400);
+  }
+
+  function showResult(query, res) {
+    btn.disabled = false;
+    progress.classList.remove('active');
+    resultQuery.textContent = query;
+    resultSummary.textContent = res.short_summary;
+    resultMarkdown.innerHTML = window.marked ? marked.parse(res.markdown_report || '') : (res.markdown_report || '');
+
+    if (res.follow_up_questions && res.follow_up_questions.length) {
+      followups.style.display = 'block';
+      followupChips.innerHTML = '';
+      res.follow_up_questions.forEach(q => {
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = q;
+        chip.addEventListener('click', () => runSearch(q));
+        followupChips.appendChild(chip);
+      });
+    }
+
+    result.classList.add('active');
+    result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function showError(message) {
+    btn.disabled = false;
+    progress.classList.remove('active');
+    errorBox.textContent = message;
+    errorBox.classList.add('active');
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    runSearch(input.value);
+  });
+
+  chipsWrap.addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (chip) runSearch(chip.dataset.q);
+  });
+</script>
+</body>
+</html>

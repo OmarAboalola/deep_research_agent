@@ -1,0 +1,7 @@
+openai>=1.50
+openai-agents>=0.0.19
+pydantic>=2.7
+python-dotenv>=1.0
+ddgs>=9.0
+fastapi>=0.110
+uvicorn[standard]>=0.29
