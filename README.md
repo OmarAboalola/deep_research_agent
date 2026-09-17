@@ -1,4 +1,4 @@
-# Canopy — Deep Research Agent
+# Canopy  Deep Research Agent
 
 A 4-agent research pipeline (**Plan → Search → Write → Send**) built on the
 OpenAI Agents SDK, with a small styled web UI on top so you can actually use
@@ -6,7 +6,7 @@ it instead of running it cell-by-cell in a notebook.
 
 Give it a question, and it plans a set of searches, runs them, writes a
 structured markdown report, saves it locally, and (optionally) emails it to
-you — all with live progress in the browser.
+you  all with live progress in the browser.
 
 ![Canopy planning a search](imgs/planning-agent.png)
 
